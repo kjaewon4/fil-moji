@@ -92,6 +92,12 @@ main {
     background: black;
 }
 
+.camera video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 또는 contain */
+}
+
 .center-panel {
     display: flex;
     flex-direction: column;
