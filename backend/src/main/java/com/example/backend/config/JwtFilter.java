@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.service.MyUsersDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -12,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
+    private final MyUsersDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -73,17 +77,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String username = claim.getSubject();
         if (username == null) {
-            System.out.println("❌ userUuid가 JWT에서 없음");
+            System.out.println("❌ username이 JWT에서 없음");
             filterChain.doFilter(request, response);
             return;
+
+
         }
+
+        // userDetailsService에서 CustomUser 객체 가져옴
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         // JWT 문제 없으면 auth 변수에 유저 정보 추가
         var authToken = new UsernamePasswordAuthenticationToken(
-                username,
+                userDetails,
                 null,
-                authorities
+                userDetails.getAuthorities()
         );
+        System.out.println("JwtFilter.authToken = " + authToken);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
         filterChain.doFilter(request, response);

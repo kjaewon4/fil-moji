@@ -41,6 +41,14 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-gson:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
+
+    // Oracle Cloud의 Object Storage 서비스(버킷, 오브젝트 파일 등)에 접근하기 위한 클라이언트 객체 제공
+    implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.38.0'
+    // 공통 기능 포함 (HTTP, 인증 등)
+    implementation 'com.oracle.oci.sdk:oci-java-sdk-common:3.38.0'
+    implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey3:3.38.0'
+
+
 }
 
 tasks.named('test') {

@@ -61,3 +61,7 @@ main {
     text-decoration: none;
     text-align: left;
 }
+
+.error-msg {
+    color: red;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
-    <link rel="stylesheet" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="/styles/fragments.css">
     <link rel="stylesheet" th:href="@{/styles/login.css}">
 </head>
 <body>
@@ -20,13 +20,15 @@
             <input type="password" th:field="*{password}" placeholder="비밀번호">
             <div th:errors="*{password}"></div>
 
-            <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+            <div class="error-msg" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
             <button type="submit">로그인</button>
         </form>
         <a class="signup-link" href="/members/new">계정 만들기</a>
     </div>
 </main>
+
+
 
 <div th:replace="fragments/footer :: footer"></div>
 <script>

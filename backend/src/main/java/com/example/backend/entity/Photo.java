@@ -23,6 +23,10 @@ public class Photo {
     @Column(name = "photo_url", nullable = false, length = 255)
     private String photoUrl;
 
+    @Setter
+    @Column(name = "par_url", length = 500)
+    private String parUrl;
+
     @Column(name = "filter_info", columnDefinition = "JSON")
     private String filterInfo;
 

@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.config.JwtUtil;
+import com.example.backend.dto.CustomUser;
 import com.example.backend.dto.LoginForm;
 import com.example.backend.dto.MemberForm;
 import com.example.backend.service.MemberService;
@@ -10,9 +11,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -122,4 +126,14 @@ public class MemberController {
         return "redirect:/login?logout";
     }
 
+    /**
+     * 로그인 상태 확인
+     */
+    @GetMapping("/api/auth/check")
+    public ResponseEntity<?> checkAuth(@AuthenticationPrincipal CustomUser user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().build();
+    }
 }

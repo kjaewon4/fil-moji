@@ -1,0 +1,42 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #fafafa;
+}
+
+.gallery-container {
+    padding: 40px;
+    text-align: center;
+}
+
+.gallery-container h2 {
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.photo-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.photo-item img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.photo-item p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
