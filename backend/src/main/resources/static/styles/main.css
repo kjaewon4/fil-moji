@@ -76,6 +76,19 @@ main {
     cursor: pointer;
 }
 
+/*버튼 색상 변경*/
+.right-panel button:last-child:hover {
+    background: #ffc782;
+}
+.left-panel button:hover {
+    background: #ffc782;
+}
+
+/* Step 1,2,3 버튼만 hover 효과 제거 */
+.left-panel button:nth-child(-n+3):hover {
+    background: white;
+}
+
 .left-panel button .step {
     font-weight: bold;
     font-size: 18px;
