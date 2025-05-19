@@ -40,7 +40,8 @@ async function sendToSpringServer() {
         emoji: selectedFilterName || "none",
         position: selectedFilter
             ? landmarkIndexToPosition(selectedFilter.landmarkIndex)
-            : "unknown"
+            : "unknown",
+        src: selectedFilter.src || "none"
     };
 
     const formData = new FormData();

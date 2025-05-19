@@ -31,6 +31,8 @@ public class PhotoController {
 
         Long userId = user.getId();
 
+        System.out.println("PhotoController.uploadPhoto filterInfo = " + filterInfo);
+
         photoService.saveUserPhoto(file, userId, filterInfo);
         return ResponseEntity.ok("Upload success");
 

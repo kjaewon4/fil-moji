@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("/api/photos/gallery", {
         method: "GET",
-        // credentials: "include"
     });
 
     const photos = await res.json();
