@@ -28,7 +28,7 @@ public class Photo {
     private String parUrl;
 
     @Column(name = "filter_info", columnDefinition = "JSON")
-    private String filterInfo;
+    private String filterInfo; // emoji, position, src
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
