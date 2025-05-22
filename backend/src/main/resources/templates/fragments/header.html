@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="header">
     <header>
-        <div><a th:href="@{/}" class="title">앱 이름</a></div>
+        <div><a th:href="@{/}" class="title">AR Filter</a></div>
         <div sec:authorize="isAuthenticated()">
             <span sec:authentication="name"></span> 님 |
             <a href="/logout" class="logout-link">Logout</a>

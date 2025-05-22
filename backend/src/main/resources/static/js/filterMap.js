@@ -15,6 +15,14 @@ const FILTER_MAP = {
       width: 200,
       height: 200
     },
+    emojiCrown: {
+      src: "https://raw.githubusercontent.com/kjaewon4/deepLearningProject/refs/heads/main/Filter/crown.png",
+      landmarkIndex: 27,
+      offsetX: 0,
+      offsetY: -120,
+      width: 240,
+      height: 240
+    },
     emoji2: {
         src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/2.png",
          landmarkIndex: 27, // 미간
@@ -127,12 +135,12 @@ const FILTER_MAP = {
         width: 100,
         height: 100
     },
-    emoji19: {
-        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/19.png",
-        landmarkIndex: 42,
-        offsetX: 0,
-        offsetY: 10,
-        width: 200,
-        height: 200
-    }
+//    emoji19: {
+//        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/19.png",
+//        landmarkIndex: 42,
+//        offsetX: 0,
+//        offsetY: 10,
+//        width: 200,
+//        height: 200
+//    }
 };

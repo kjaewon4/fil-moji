@@ -3,6 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
+a{
+    text-decoration: none;
+}
 
 body, html {
     height: 100%;
@@ -12,24 +15,27 @@ body, html {
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-a.title {
-    text-decoration: none;
-    color: inherit;
-    font-weight: bold;
-    font-size: 18px;
+.title {
+  font-weight: bold;
+  font-size: 20px;
 }
-
 
 .login-link, .logout-link {
-    padding: 6px 12px;
-    text-decoration: none;
+  color: #7c3aed;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  color: #555;
 }
 
 .username {
@@ -43,17 +49,12 @@ a.title {
 
 
 footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 10px 20px;
-    border-top: 1px solid #ccc;
-    font-size: 14px;
-    background: #fff;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+  border-top: 1px solid #ddd;
+  padding: 16px 32px;
+  font-size: 14px;
+  color: #6b7280;
+  display: flex;
+  justify-content: space-between;
 }
 
 footer .right {

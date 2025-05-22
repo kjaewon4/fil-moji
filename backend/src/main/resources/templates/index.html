@@ -4,26 +4,28 @@
     <meta charset="UTF-8">
     <title>앱 이름</title>
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/fragments.css">
 </head>
 <body>
 
 <div th:replace="fragments/header :: header"></div>
 
 <main>
+    <!-- Left Panel -->
     <div class="left-panel">
-        <button>
+        <button class="step-box">
             <span class="step">Step 1</span>
-            로그인 후 화면에<br> 얼굴을 인식</br>
+            로그인 후 화면에<br>얼굴을 인식
         </button>
-        <button>
+        <button class="step-box">
             <span class="step">Step 2</span>
             이모지 선택
         </button>
-        <button>
+        <button class="step-box">
             <span class="step">Step 3</span>
             촬영
         </button>
-        <button onclick="location.href='/gallery'">Gallery</button>
+        <button class="gallery-btn" onclick="location.href='/gallery'">Gallery</button>
     </div>
 
     <div class="center-panel">
@@ -45,10 +47,11 @@
 
 
     <div class="right-panel">
-        <button style="margin-top: 59px;">emoji</button>
+        <button class="emoji-title">emoji</button>
         <div class="emoji-panel">
             <button onclick="selectedFilterFunc('emojiCatFace')"><img src="https://raw.githubusercontent.com/kjaewon4/deepLearningProject/b3ec93b0b62eca83ad4d166ee708583871376199/Filter/catStyleFilter.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emojiDogNose')"><img src="https://raw.githubusercontent.com/kjaewon4/deepLearningProject/b3ec93b0b62eca83ad4d166ee708583871376199/Filter/dogNose.png" style="width: 30px; height: 30px;"></button>
+            <button onclick="selectedFilterFunc('emojiCrown')"><img src="https://raw.githubusercontent.com/kjaewon4/deepLearningProject/refs/heads/main/Filter/crown.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emoji2')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/2.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emoji5')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/5.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emoji6')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/6.png" style="width: 30px; height: 30px;"></button>
@@ -62,9 +65,8 @@
             <button onclick="selectedFilterFunc('emoji16')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/16.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emoji17')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/17.png" style="width: 30px; height: 30px;"></button>
             <button onclick="selectedFilterFunc('emoji18')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/18.png" style="width: 30px; height: 30px;"></button>
-            <button onclick="selectedFilterFunc('emoji19')"><img src="https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/19.png" style="width: 30px; height: 30px;"></button>
         </div>
-        <button>delete</button>
+        <button class="delete-btn">delete</button>
     </div>
 </main>
 
