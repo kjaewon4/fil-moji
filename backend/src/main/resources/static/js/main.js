@@ -86,7 +86,10 @@ async function sendToSpringServer() {
 
     // 5. 최종 이미지 blob으로 변환 (필터 포함된 상태)
     const finalBlob = await canvasToBlob(tempCanvas);
-
+    if (!finalBlob) {
+        console.error("📛 finalBlob이 null입니다. 캔버스를 확인하세요.");
+        return;
+    }
     // 6. 전송
     const filterInfo = {
         emoji: selectedFilterName || "none",
@@ -227,14 +230,14 @@ function drawLandmarksOnCanvas(landmarks) {
 
     landmarks.forEach(p => {
         ctx.beginPath(); // 새로운 경로 시작
-        ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);  // x, y 좌표에 반지름 2짜리 원을 그림
-        ctx.fillStyle = "red";
-        ctx.fill();
-
-        // 디버그 텍스트
-        ctx.fillStyle = "white";
-        ctx.font = "10px Arial";
-        ctx.fillText(p.index, p.x + 4, p.y - 4);
+//        ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);  // x, y 좌표에 반지름 2짜리 원을 그림
+//        ctx.fillStyle = "red";
+//        ctx.fill();
+//
+//        // 디버그 텍스트
+//        ctx.fillStyle = "white";
+//        ctx.font = "10px Arial";
+//        ctx.fillText(p.index, p.x + 4, p.y - 4);
     })
 }
 
@@ -272,32 +275,37 @@ window.addEventListener("DOMContentLoaded", () => {
  * 필터 그리기
  */
 function drawFilterOnCanvas(landmarks) {
-
+    if (!Array.isArray(landmarks) || landmarks.length === 0) return;
     if (!selectedFilter || !selectedFilter.src || !selectedFilter.landmarkIndex) return;
 
+    const { src, landmarkIndex, offsetX = 0, offsetY = 0, width = 40, height = 40 } = selectedFilter;
     const img = new Image();
-    img.src = selectedFilter.src;
+    img.crossOrigin = "anonymous"; // 외부 이미지 대비
+    img.src = src;
 
     img.onload = () => {
-        // 필터 위치 계산
         let x = 0, y = 0;
-        if (Array.isArray(selectedFilter.landmarkIndex)) {
-            const [i1, i2] = selectedFilter.landmarkIndex;
+        if (Array.isArray(landmarkIndex)) {
+            const [i1, i2] = landmarkIndex;
             const p1 = landmarks.find(p => p.index === i1);
             const p2 = landmarks.find(p => p.index === i2);
             if (!p1 || !p2) return;
             x = (p1.x + p2.x) / 2;
             y = (p1.y + p2.y) / 2;
         } else {
-            const point = landmarks.find(p => p.index === selectedFilter.landmarkIndex);
+            const point = landmarks.find(p => p.index === landmarkIndex);
             if (!point) return;
             x = point.x;
             y = point.y;
         }
 
-        // 필터 이미지 그리기
-        const size = 40; // 필터 크기 조절 (필요 시)
-        ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+        ctx.drawImage(
+            img,
+            x - width / 2 + offsetX,
+            y - height / 2 + offsetY,
+            width,
+            height
+        );
+    };
 
-    }
 }
