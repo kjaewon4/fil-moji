@@ -10,6 +10,6 @@ async def landmarks(file: UploadFile = File(...)):
         result = await extract_landmarks(file)
         return JSONResponse(content={"landmarks": result})
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-    
-    
+        import traceback
+        traceback.print_exc()  # 전체 에러 로그 출력
+        return JSONResponse(status_code=500, content={"error": str(e)})    
