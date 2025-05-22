@@ -8,7 +8,7 @@ router = APIRouter()
 async def landmarks(file: UploadFile = File(...)):
     try:
         result = await extract_landmarks(file)
-        return JSONResponse(content={"landmarks": result})
+        return JSONResponse(content={"faces": result})
     except Exception as e:
         import traceback
         traceback.print_exc()  # 전체 에러 로그 출력

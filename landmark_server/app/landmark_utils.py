@@ -15,20 +15,28 @@ async def extract_landmarks(file):
         tmp.write(await file.read()) 
         tmp_path = tmp.name
 
-    # 이미지 로드 후 흑백 이미지로 변환 (dlib은 grayscale 입력만 받음)
+    # OpenCV로 이미지 로드 후 흑백 이미지로 변환 (dlib은 grayscale 입력만 받음)
     img = cv2.imread(tmp_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # 얼굴 탐지 수행 → 결과는 dlib.rectangle 객체의 리스트
     faces = face_detector(gray)
 
-    # 얼굴이 하나도 탐지되지 않으면 예외 발생
-    if len(faces) == 0:
-        os.remove(tmp_path)
-        raise Exception("얼굴을 찾을 수 없습니다.")
-    
-    landmarks = landmark_predictor(gray, faces[0]) # 첫 번째 얼굴에 대해서만 처리
-    coords = [{"index": i, "x": landmarks.part(i).x, "y": landmarks.part(i).y} for i in range(68)] # 리스트 형태로 반환할 JSON 준비
+    result = []
+
+    for face_id, face in enumerate(faces):
+        landmarks = landmark_predictor(gray, face)
+        face_landmarks = []
+        for i in range(68):
+            x = landmarks.part(i).x
+            y = landmarks.part(i).y
+            face_landmarks.append({
+                "face_id": face_id,
+                "index": i,
+                "x": x,
+                "y": y
+            })
+        result.append(face_landmarks)
 
     # 임시 저장한 이미지 삭제 후 결과 반환
     os.remove(tmp_path)
-    return coords
+    return result

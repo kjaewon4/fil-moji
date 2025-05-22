@@ -30,7 +30,7 @@ function connectCamera(videoElement) {
 }
 
 /**
- * 촬영 후 Spring 서버로 전송
+ * 촬영 후 Spring 서버로 전송 (필터 포함)
  */
 async function sendToSpringServer() {
     const isUserLoggedIn = await isLoggedIn();
@@ -39,6 +39,55 @@ async function sendToSpringServer() {
     const canvas = captureVideoToCanvas(video);
     const blob = await canvasToBlob(canvas);
 
+    // 1. 비디오 프레임 캡처용 임시 캔버스
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = video.videoWidth;
+    tempCanvas.height = video.videoHeight;
+    const tempCtx = tempCanvas.getContext("2d");
+
+    // 2. 비디오 그리기
+    tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+
+    // 3. 랜드마크 추출
+    const blobForLandmarks = await canvasToBlob(tempCanvas);
+    const landmarks = await getLandmarksFromServer(blobForLandmarks);
+
+    // 4. 필터 이미지 합성
+    if (selectedFilter && selectedFilter.src && selectedFilter.landmarkIndex) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = selectedFilter.src;
+
+        await new Promise((resolve) => {
+            img.onload = () => {
+                let x = 0, y = 0;
+                if (Array.isArray(selectedFilter.landmarkIndex)) {
+                    const [i1, i2] = selectedFilter.landmarkIndex;
+                    const p1 = landmarks.find(p => p.index === i1);
+                    const p2 = landmarks.find(p => p.index === i2);
+                    if (p1 && p2) {
+                        x = (p1.x + p2.x) / 2;
+                        y = (p1.y + p2.y) / 2;
+                    }
+                } else {
+                    const point = landmarks.find(p => p.index === selectedFilter.landmarkIndex);
+                    if (point) {
+                        x = point.x;
+                        y = point.y;
+                    }
+                }
+
+                const size = 40;
+                tempCtx.drawImage(img, x - size / 2, y - size / 2, size, size);
+                resolve();
+            };
+        });
+    }
+
+    // 5. 최종 이미지 blob으로 변환 (필터 포함된 상태)
+    const finalBlob = await canvasToBlob(tempCanvas);
+
+    // 6. 전송
     const filterInfo = {
         emoji: selectedFilterName || "none",
         position: selectedFilter
@@ -48,7 +97,7 @@ async function sendToSpringServer() {
     };
 
     const formData = new FormData();
-    formData.append("file", blob, "capture.jpg");
+    formData.append("file", finalBlob, "capture.jpg");
     formData.append("filterInfo", JSON.stringify(filterInfo));
 
     const res = await fetch("http://localhost:8080/api/photos/upload", {
@@ -57,7 +106,7 @@ async function sendToSpringServer() {
     });
 
     const result = await res.json();
-    console.log("📸 Spring 응답:", result);
+    console.log("📸 Spring 응답:", result.message);
 }
 
 /**
@@ -146,20 +195,25 @@ async function getLandmarksFromServer(blob) {
     const formData = new FormData();
     formData.append("file", blob, "frame.jpg");
 
-    const res = await fetch("http://localhost:8000/api/landmark", {
-        method: "POST",
-        body: formData,
-    });
+    try {
+        const res = await fetch("http://localhost:8000/api/landmark", {
+            method: "POST",
+            body: formData,
+        });
 
-    const json = await res.json();
-    console.log("서버 응답:", json);
+        if (!res.ok) {
+            console.error("서버 오류 응답:", await res.text());
+            return null;
+        }
 
-    if (json.landmarks && Array.isArray(json.landmarks)) {
-        return json.landmarks;
-    } else {
-        console.warn("랜드마크 없음 또는 오류 응답:", json);
-        return []; // or null
+        const json = await res.json();
+        return json.faces?.[0] ?? [];
+
+    } catch (e) {
+        console.error("랜드마크 요청 중 예외 발생:", e);
+        return null;
     }
+
 }
 
 /**

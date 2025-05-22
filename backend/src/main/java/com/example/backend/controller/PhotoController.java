@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class PhotoController {
     private final PhotoService photoService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadPhoto(
+    public ResponseEntity<Map<String, String>> uploadPhoto(
             @RequestParam MultipartFile file,
             @RequestParam String filterInfo,
             @AuthenticationPrincipal CustomUser user) throws IOException {
@@ -34,7 +35,7 @@ public class PhotoController {
         System.out.println("PhotoController.uploadPhoto filterInfo = " + filterInfo);
 
         photoService.saveUserPhoto(file, userId, filterInfo);
-        return ResponseEntity.ok("Upload success");
+        return ResponseEntity.ok(Map.of("message", "Upload success"));
 
     }
 
