@@ -1,14 +1,22 @@
 const FILTER_MAP = {
     emojiCatFace: {
          src: "https://raw.githubusercontent.com/kjaewon4/deepLearningProject/b3ec93b0b62eca83ad4d166ee708583871376199/Filter/catStyleFilter.png",
-         landmarkIndex: 27, // 눈썹 사이 중앙
+         landmarkIndex: 27, // 미간
          offsetX: 0,
          offsetY: 0,
          width: 250,
          height: 250
     },
+    emojiDogNose: {
+      src: "https://raw.githubusercontent.com/kjaewon4/deepLearningProject/b3ec93b0b62eca83ad4d166ee708583871376199/Filter/dogNose.png",
+      landmarkIndex: 33,
+      offsetX: 0,
+      offsetY: 0,
+      width: 200,
+      height: 200
+    },
     emoji1: {
-        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/1.png",
+        src: "",
         landmarkIndex: 10,
         offsetX: -25,
         offsetY: -80,
@@ -104,7 +112,7 @@ const FILTER_MAP = {
         height: 50
     },
     emoji13: {
-        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/13.png",
+        src: "",
         landmarkIndex: 10,
         offsetX: -25,
         offsetY: -80,
@@ -112,7 +120,7 @@ const FILTER_MAP = {
         height: 50
     },
     emoji14: {
-        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/14.png",
+        src: "",
         landmarkIndex: 10,
         offsetX: -25,
         offsetY: -80,
