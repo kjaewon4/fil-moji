@@ -1,11 +1,11 @@
 const FILTER_MAP = {
     emojiCatFace: {
          src: "https://raw.githubusercontent.com/kjaewon4/deepLearningProject/b3ec93b0b62eca83ad4d166ee708583871376199/Filter/catStyleFilter.png",
-         landmarkIndex: [21, 22], // 눈썹 사이 중앙
+         landmarkIndex: 27, // 눈썹 사이 중앙
          offsetX: 0,
          offsetY: 0,
-         width: 200,
-         height: 200
+         width: 250,
+         height: 250
     },
     emoji1: {
         src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/1.png",

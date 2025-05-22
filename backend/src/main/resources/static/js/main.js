@@ -275,37 +275,43 @@ window.addEventListener("DOMContentLoaded", () => {
  * 필터 그리기
  */
 function drawFilterOnCanvas(landmarks) {
-    if (!Array.isArray(landmarks) || landmarks.length === 0) return;
     if (!selectedFilter || !selectedFilter.src || !selectedFilter.landmarkIndex) return;
 
-    const { src, landmarkIndex, offsetX = 0, offsetY = 0, width = 40, height = 40 } = selectedFilter;
+    const { src, landmarkIndex, offsetX = 0, offsetY = 0, width = 50, height = 50 } = selectedFilter;
     const img = new Image();
-    img.crossOrigin = "anonymous"; // 외부 이미지 대비
+    img.crossOrigin = "anonymous";
     img.src = src;
 
     img.onload = () => {
         let x = 0, y = 0;
+
         if (Array.isArray(landmarkIndex)) {
             const [i1, i2] = landmarkIndex;
             const p1 = landmarks.find(p => p.index === i1);
             const p2 = landmarks.find(p => p.index === i2);
             if (!p1 || !p2) return;
+
+            // 중심 좌표
             x = (p1.x + p2.x) / 2;
             y = (p1.y + p2.y) / 2;
+
+            // ✅ 거리 계산 (유클리드 거리)
+            const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
+            // ✅ 필터 크기 비례 조정 (기준 거리 50 기준)
+            const scale = dist / 50 * 2.0;
+            const scaledWidth = width * scale;
+            const scaledHeight = height * scale;
+
+            ctx.drawImage(img, x + offsetX - scaledWidth / 2, y + offsetY - scaledHeight / 2, scaledWidth, scaledHeight);
+
         } else {
             const point = landmarks.find(p => p.index === landmarkIndex);
             if (!point) return;
             x = point.x;
             y = point.y;
+
+            ctx.drawImage(img, x + offsetX - width / 2, y + offsetY - height / 2, width, height);
         }
-
-        ctx.drawImage(
-            img,
-            x - width / 2 + offsetX,
-            y - height / 2 + offsetY,
-            width,
-            height
-        );
     };
-
 }
