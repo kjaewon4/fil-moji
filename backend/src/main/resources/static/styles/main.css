@@ -44,17 +44,20 @@ a.title {
 
 
 main {
-    flex: 1;
+    /*flex: 1;*/
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    padding: 40px 20px;
+    padding: 0 120px;
 }
 
-.left-panel, .right-panel {
+.left-panel,
+.right-panel {
+    width: 240px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 20px;
 }
 
 .left-panel {
@@ -70,7 +73,7 @@ main {
     padding: 15px;
     border-radius: 12px;
     border: 1px solid #aaa;
-    width: 160px;
+    width: 100%;
     background-color: white;
     font-size: 14px;
     cursor: pointer;
@@ -98,25 +101,18 @@ main {
 
 .camera {
     position: relative;
-    width: 240px;
-    height: 340px;
+    width: 350px;
+    height: 450px;
     background: black;
 }
 
-.camera video {
+#video, #canvas {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 또는 contain */
-}
-
-#canvas {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
+    object-fit: cover;
 }
 
 .center-panel {

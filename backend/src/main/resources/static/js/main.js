@@ -11,6 +11,9 @@ function selectedFilterFunc(name) {
 
 // 카메라 연결
 const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
 connectCamera(video);
 
 /**
@@ -88,13 +91,13 @@ function closeModal() {
  * 비디오를 캔버스로 캡처
  */
 function captureVideoToCanvas(videoElement) {
-    const canvas = document.createElement("canvas");
-    canvas.width = videoElement.videoWidth;
-    canvas.height = videoElement.videoHeight;
+    const tempCanvas  = document.createElement("canvas");
+    tempCanvas.width = videoElement.videoWidth;
+    tempCanvas.height = videoElement.videoHeight;
 
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-    return canvas;
+    const tempCtx = tempCanvas.getContext("2d");
+    tempCtx.drawImage(videoElement, 0, 0, tempCanvas.width, tempCanvas.height);
+    return tempCanvas;
 }
 
 /**
@@ -163,21 +166,21 @@ async function getLandmarksFromServer(blob) {
  * 캔버스에 좌표 렌더링 (필터)
  */
 function drawLandmarksOnCanvas(landmarks) {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-
-    // 캔버스 사이즈를 비디오에 맞게 재설정
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    ctx.clearRect(0,0, canvas.width, canvas.height);  // 매 프레임 초기화
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     landmarks.forEach(p => {
         ctx.beginPath(); // 새로운 경로 시작
         ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);  // x, y 좌표에 반지름 2짜리 원을 그림
         ctx.fillStyle = "red";
         ctx.fill();
+
+        // 디버그 텍스트
+        ctx.fillStyle = "white";
+        ctx.font = "10px Arial";
+        ctx.fillText(p.index, p.x + 4, p.y - 4);
     })
 }
 
@@ -185,24 +188,22 @@ function drawLandmarksOnCanvas(landmarks) {
  * 실시간 루프
  */
 async function processLoop() {
-    const video = document.getElementById("video");
-    const canvas = captureVideoToCanvas(video);
+    const canvasTemp = captureVideoToCanvas(video);
 
-    canvas.toBlob(async (blob) => {
+    canvasTemp.toBlob(async (blob) => {
         try {
             const landmarks = await getLandmarksFromServer(blob);
-            drawLandmarksOnCanvas(landmarks);
-            drawFilterOnCanvas(landmarks);
+            drawFilterOnCanvas(landmarks);     // ← 순서 중요
+            drawLandmarksOnCanvas(landmarks);  // ← 점 위에 찍히게
         } catch (e) {
-            console.log("얼굴 없음:", e.messages);
+            console.log("얼굴 없음:", e.message);
         }
-        requestAnimationFrame(processLoop); // 다음 루프 예약
+        requestAnimationFrame(processLoop);
     }, "image/jpeg");
 }
 
 // 최초 실행
 window.addEventListener("DOMContentLoaded", () => {
-    const video = document.getElementById("video");
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
             video.srcObject = stream;
@@ -217,9 +218,6 @@ window.addEventListener("DOMContentLoaded", () => {
  * 필터 그리기
  */
 function drawFilterOnCanvas(landmarks) {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    // ctx.clearRect(0,0,canvas.width, canvas.height);
 
     if (!selectedFilter || !selectedFilter.src || !selectedFilter.landmarkIndex) return;
 
