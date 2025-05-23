@@ -36,9 +36,9 @@ public class MyUsersDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        CustomUser custiomUser = new CustomUser(user, authorities);
+        CustomUser customUser = new CustomUser(user, authorities);
 
-        return custiomUser;
+        return customUser;
 
     }
 }

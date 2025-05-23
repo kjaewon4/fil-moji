@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.dto.CustomUser;
 import com.example.backend.service.MyUsersDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -80,19 +81,20 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println("❌ username이 JWT에서 없음");
             filterChain.doFilter(request, response);
             return;
-
-
         }
 
-        // userDetailsService에서 CustomUser 객체 가져옴
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        Long userId = ((Number) claim.get("userId")).longValue();
+        System.out.println("✅ JWT Claim userId: " + claim.get("userId"));
 
-        // JWT 문제 없으면 auth 변수에 유저 정보 추가
-        var authToken = new UsernamePasswordAuthenticationToken(
-                userDetails,
+        CustomUser customUser = new CustomUser(userId, username, "PROTECTED", authorities);
+
+        // 인증 객체 생성
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                customUser,
                 null,
-                userDetails.getAuthorities()
+                customUser.getAuthorities()
         );
+
         System.out.println("JwtFilter.authToken = " + authToken);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);

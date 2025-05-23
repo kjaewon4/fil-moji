@@ -295,7 +295,7 @@ function drawFilterOnCanvas(landmarks) {
             x = (p1.x + p2.x) / 2;
             y = (p1.y + p2.y) / 2;
 
-            // ✅ 거리 계산 (유클리드 거리)
+            // 거리 계산 (유클리드 거리)
             const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 
             // ✅ 필터 크기 비례 조정 (기준 거리 50 기준)

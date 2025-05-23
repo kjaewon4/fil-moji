@@ -11,10 +11,13 @@ import java.util.Collection;
 public class CustomUser extends User {
     private final Long id;
 
-
     public CustomUser(Member member, Collection<? extends GrantedAuthority> authorities) {
         super(member.getUsername(), member.getPassword(), authorities);
         this.id = member.getId();
     }
 
+    public CustomUser(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+        this.id = id;
+    }
 }

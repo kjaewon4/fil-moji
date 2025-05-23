@@ -24,14 +24,35 @@ document.addEventListener("DOMContentLoaded", async () => {
         div.className = "photo-item";
 
         div.innerHTML = `
-            <img src="${photo.parUrl}" alt="user photo" style="width: 100%">
-            <p>
-                필터: 
-                ${src ? `<img src="${src}" alt="emoji" style="width: 24px; height: 24px;">` : emoji}
+            <img src="${photo.parUrl}" alt="user photo" class="photo-img">
+            <div class="photo-meta">
+                필터:
+                ${src ? `<img src="${src}" alt="emoji" class="emoji-icon">` : emoji}
                 (${position})
-            </p>
+            </div>
         `;
 
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.innerText = "삭제";
+        deleteBtn.addEventListener("click", () => deletePhoto(photo.photoUrl, deleteBtn));
+
+        div.appendChild(deleteBtn);
         grid.appendChild(div);
+
     });
 });
+
+async function deletePhoto(fileName, btnElement) {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    const res = await fetch(`/api/photos?path=${fileName}`, {
+      method: "DELETE"
+    });
+
+    if (res.ok) {
+        btnElement.closest(".photo-item").remove();
+    } else {
+        alert("삭제 실패");
+    }
+}
