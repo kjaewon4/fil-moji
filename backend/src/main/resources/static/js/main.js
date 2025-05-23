@@ -1,12 +1,20 @@
 // 선택된 필터 관련 변수
 let selectedFilter = null;
 let selectedFilterName = null;
+document.querySelector(".delete-btn").addEventListener("click", clearSelectedImage);
 
 // 이모지 필터 선택 함수
 function selectedFilterFunc(name) {
     selectedFilter = FILTER_MAP[name];
     selectedFilterName = name;
     console.log("선택된 필터:", name);
+}
+
+//이미지 선택 해제
+function clearSelectedImage() {
+    selectedFilter = null;
+    selectedFilterName = null;
+    console.log("🔄 이모지 필터 선택 해제됨");
 }
 
 // 카메라 연결
@@ -315,3 +323,7 @@ function drawFilterOnCanvas(landmarks) {
         }
     };
 }
+
+
+
+
