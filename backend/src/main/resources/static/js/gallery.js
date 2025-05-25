@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="photo-meta">
                 필터:
                 ${src ? `<img src="${src}" alt="emoji" class="emoji-icon">` : emoji}
-                (${position})
             </div>
         `;
 
