@@ -102,7 +102,7 @@ public class MemberController {
             memberService.register(form);
         } catch (IllegalStateException e) {
             result.rejectValue("email", "error.email", e.getMessage());
-            return "members/new";
+            return "/";
         }
 
         return "redirect:/login";
