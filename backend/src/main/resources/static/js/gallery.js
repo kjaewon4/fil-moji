@@ -45,10 +45,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="card-footer">
         <div class="social-icons">
           <!-- 실제 아이콘 경로로 교체하세요 -->
-          <img src="https://image.flaticon.com/icons/png/512/2111/2111223.png" 
-               alt="kakaotalk" class="social-icon" />
-          <img src="https://image.flaticon.com/icons/png/512/2111/2111463.png" 
-               alt="instagram" class="social-icon" />
+              <button class="social-icon download-btn" title="다운로드"></button>
+
+<!--          <img src="/styles/kakao-talk.png" -->
+<!--               alt="kakaotalk" class="social-icon" />-->
+<!--  -->
         </div>
         <div class="emoji-used">
           ${ src
@@ -67,6 +68,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const deleteBtn = card.querySelector(".delete-btn");
         deleteBtn.addEventListener("click", () => {
             deletePhoto(photo.photoUrl, deleteBtn);
+        });
+        // 다운로드 버튼 클릭 이벤트 연결
+        const downloadBtn = card.querySelector(".download-btn");
+        downloadBtn.addEventListener("click", () => {
+            // 예시: 파일명으로 photo.parUrl에서 마지막 경로만 잘라서 사용
+            const urlSegments = photo.parUrl.split("/");
+            const filename = urlSegments[urlSegments.length - 1];
+            downloadImage(photo.parUrl, filename);
         });
 
         // 6) 그리드 컨테이너에 카드(div.photo-card)를 추가
@@ -88,5 +97,37 @@ async function deletePhoto(fileName, btnElement) {
         btnElement.closest(".photo-card").remove();
     } else {
         alert("삭제 실패");
+    }
+}
+
+// ②: 이미지 URL을 fetch해서 Blob으로 받아오고, 다운로드 트리거
+async function downloadImage(imageUrl, filename) {
+    try {
+        const response = await fetch(imageUrl, { mode: 'cors' });
+        // (외부 도메인이라면 CORS가 허용돼 있어야 함)
+
+        if (!response.ok) {
+            throw new Error("네트워크 응답에 문제가 있습니다.");
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        // 임시로 a 태그 생성하여 클릭 트리거
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = filename; // 예: "abc123.jpg"
+        document.body.appendChild(a);
+        a.click();
+
+        // 메모리 해제
+        setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(a);
+        }, 100);
+
+    } catch (error) {
+        console.error("이미지 다운로드 오류:", error);
+        alert("이미지를 다운로드할 수 없습니다.");
     }
 }
