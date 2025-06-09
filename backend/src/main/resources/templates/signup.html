@@ -13,7 +13,7 @@
 <main>
     <div class="signup-box">
         <h2>회원가입</h2>
-        <form method="post" th:action="@{/members}" th:object="${memberForm}">
+        <form method="post" th:action="@{/members}" th:object="${memberForm}" class="signup-form">
             <input type="text" th:field="*{username}" placeholder="사용자 ID">
             <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">에러</div>
 

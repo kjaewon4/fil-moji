@@ -41,7 +41,7 @@ main {
     width: 100%;
     padding: 14px;
     font-size: 16px;
-    background-color: #1a73e8;
+    background-color: #7c3aed;
     color: white;
     border: none;
     border-radius: 8px;
@@ -50,7 +50,7 @@ main {
 }
 
 .login-box button:hover {
-    background-color: #155ec4;
+    background-color: #551A8B;
 }
 
 .signup-link {

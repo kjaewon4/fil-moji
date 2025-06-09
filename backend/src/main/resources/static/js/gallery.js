@@ -47,9 +47,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           <!-- 실제 아이콘 경로로 교체하세요 -->
               <button class="social-icon download-btn" title="다운로드"></button>
 
-<!--          <img src="/styles/kakao-talk.png" -->
-<!--               alt="kakaotalk" class="social-icon" />-->
-<!--  -->
         </div>
         <div class="emoji-used">
           ${ src

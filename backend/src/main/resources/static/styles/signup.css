@@ -1,3 +1,11 @@
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
 .signup-box {
     width: 100%;
     max-width: 400px;
@@ -8,6 +16,9 @@
     text-align: center;
 }
 
+.signup-form {
+    margin-bottom: 10px;
+}
 .signup-box h2 {
     margin-bottom: 30px;
     font-size: 24px;
@@ -26,7 +37,7 @@
     width: 100%;
     padding: 14px;
     font-size: 16px;
-    background-color: #1a73e8;
+    background-color: #7c3aed;
     color: white;
     border: none;
     border-radius: 8px;
@@ -35,7 +46,7 @@
 }
 
 .signup-box button:hover {
-    background-color: #155ec4;
+    background-color: #551A8B;
 }
 
 .error {

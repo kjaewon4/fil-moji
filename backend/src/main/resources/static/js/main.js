@@ -69,25 +69,51 @@ async function sendToSpringServer() {
         await new Promise((resolve) => {
             img.onload = () => {
                 let x = 0, y = 0;
-                if (Array.isArray(selectedFilter.landmarkIndex)) {
-                    const [i1, i2] = selectedFilter.landmarkIndex;
+                // drawW, drawH 초기값을 FILTER_MAP에서 온 값으로 세팅
+                let drawW = selectedFilter.width;
+                let drawH = selectedFilter.height;
+
+                const { offsetX = 0, offsetY = 0, landmarkIndex } = selectedFilter;
+
+                if (Array.isArray(landmarkIndex)) {
+                    const [i1, i2] = landmarkIndex;
                     const p1 = landmarks.find(p => p.index === i1);
                     const p2 = landmarks.find(p => p.index === i2);
                     if (p1 && p2) {
                         x = (p1.x + p2.x) / 2;
                         y = (p1.y + p2.y) / 2;
+                        // 얼굴 간 거리 비례 스케일
+                        const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                        const scale = dist / 50 * 2.0;  // 실시간과 동일한 기준
+                        drawW = drawW * scale;
+                        drawH = drawH * scale;
+
+                        console.log(
+                            "filter:", selectedFilterName,
+                            "dist:", dist.toFixed(1),
+                            "scale:", scale.toFixed(2),
+                            "drawW×drawH:", Math.round(drawW), "×", Math.round(drawH)
+                        );
+
                     }
                 } else {
-                    const point = landmarks.find(p => p.index === selectedFilter.landmarkIndex);
-                    if (point) {
-                        x = point.x;
-                        y = point.y;
+                    const p = landmarks.find(p => p.index === landmarkIndex);
+                    if (p) {
+                        x = p.x;
+                        y = p.y;
                     }
                 }
 
-                const size = 40;
-                tempCtx.drawImage(img, x - size / 2, y - size / 2, size, size);
+                // 실제로 필터 그리기
+                tempCtx.drawImage(
+                    img,
+                    x + offsetX - drawW / 2,
+                    y + offsetY - drawH / 2,
+                    drawW,
+                    drawH
+                );
                 resolve();
+
             };
         });
     }
@@ -170,7 +196,7 @@ function canvasToBlob(canvas) {
 }
 
 /**
- * 랜드마크 인덱스를 위치 이름으로 매핑
+ * 랜드마크 인덱스를 위치 이름으로 매핑 (현재 미사용)
  */
 function landmarkIndexToPosition(index) {
     if (Array.isArray(index)) {
@@ -306,7 +332,7 @@ function drawFilterOnCanvas(landmarks) {
             // 거리 계산 (유클리드 거리)
             const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 
-            // ✅ 필터 크기 비례 조정 (기준 거리 50 기준)
+            // 필터 크기 비례 조정 (기준 거리 50 기준)
             const scale = dist / 50 * 2.0;
             const scaledWidth = width * scale;
             const scaledHeight = height * scale;
