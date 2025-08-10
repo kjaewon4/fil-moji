@@ -134,13 +134,5 @@ const FILTER_MAP = {
         offsetY: 20,
         width: 100,
         height: 100
-    },
-//    emoji19: {
-//        src: "https://raw.githubusercontent.com/che1206/deeplearning/2b275373bb7dbcf1ea9be9a8f7e8771011f9a857/deep/emo/19.png",
-//        landmarkIndex: 42,
-//        offsetX: 0,
-//        offsetY: 10,
-//        width: 200,
-//        height: 200
-//    }
+    }
 };

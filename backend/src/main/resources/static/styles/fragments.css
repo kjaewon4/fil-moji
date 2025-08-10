@@ -18,14 +18,29 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
+  padding: 16px;
+    margin: 0 120px;
   border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  /*box-shadow: 0 2px 4px rgba(0,0,0,0.05);*/
+}
+
+.header-container {
+    display: flex;
+    align-items: center;    /* 로고와 텍스트를 수직 중앙 정렬 */
+    gap: 8px;                /* 로고와 타이틀 사이 간격 */
+}
+
+.header-container .logo {
+    width: 70px;
+    height: auto;
+
 }
 
 .title {
-  font-weight: bold;
-  font-size: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    /*color: #4b18e3;*/
+    font-style: italic;
 }
 
 .login-link, .logout-link {
@@ -35,7 +50,7 @@ header {
 }
 
 .login-link:hover {
-  color: #555;
+    color: #555;
 }
 
 .username {

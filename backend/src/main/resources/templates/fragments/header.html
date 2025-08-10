@@ -3,7 +3,11 @@
 <body>
 <div th:fragment="header">
     <header>
-        <div><a th:href="@{/}" class="title">AR Filter</a></div>
+        <div class="header-container">
+            <a th:href="@{/}" class="title">
+                <img class="logo" th:src="@{/styles/FilMoji.jpg}" alt="logo"/>
+            </a>
+        </div>
         <div sec:authorize="isAuthenticated()">
             <span sec:authentication="name"></span> 님 |
             <a href="/logout" class="logout-link">Logout</a>

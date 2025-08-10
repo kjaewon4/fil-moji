@@ -12,7 +12,7 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans KR', sans-serif; /* 한글 지원이 좋은 폰트 */
-    background-color: #fafafa;
+    /*background-color: #fafafa;*/
     color: #333;
 }
 
