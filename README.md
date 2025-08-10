@@ -246,9 +246,13 @@ cd ..
 로컬에 MySQL이 설치되어 있지 않거나 Docker 컨테이너로 MySQL을 사용하려면 다음 명령어를 실행합니다. `your_mysql_root_password`를 원하는 비밀번호로 변경하세요.
 
 ```bash
+# 리눅스 및 mac ver
 docker run -d --name filmoji-mysql --network filmoji-network -p 3306:3306 \
   -e MYSQL_ROOT_PASSWORD=your_mysql_root_password \
   -e MYSQL_DATABASE=fil-moji mysql:8.0
+  
+# 윈도우 파워셀 ver
+docker run -d --name filmoji-mysql --network filmoji-network -p 3306:3306 -e MYSQL_ROOT_PASSWORD=your_mysql_root_password -e MYSQL_DATABASE=fil-moji mysql:8.0
 ```
 
 #### 7. 컨테이너 실행
@@ -261,11 +265,17 @@ docker run -d --name filmoji-backend --network filmoji-network -p 8080:8080 \
   -e DB_HOST=filmoji-mysql \
   -e DB_NAME=fil-moji \
   -e DB_PASSWORD=your_mysql_root_password \
-  spring-boot-backend:latest
+  spring-boot-backend:latest  
 
 # FastAPI 컨테이너 실행
 docker run -d --name filmoji-landmark --network filmoji-network -p 8000:8000 fastapi-landmark-server:latest
 ```
+```aiignore
+# 윈도우 파워셀 ver
+docker run -d --name filmoji-backend --network filmoji-network -p 8080:8080 -e DB_HOST=filmoji-mysql -e DB_NAME=fil-moji -e DB_PASSWORD=your_mysql_root_password spring-boot-backend:latest
+
+```
+
 
 #### 8. 실행 확인
 
