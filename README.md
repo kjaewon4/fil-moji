@@ -14,7 +14,7 @@
 ![dlib](https://img.shields.io/badge/dlib-000000?style=flat-square&logo=dlib&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white)
 ![Oracle Cloud](https://img.shields.io/badge/Oracle_Cloud-F80000?style=flat-square&logo=oracle&logoColor=white)
-
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&loColor=white)
 > 앱 설치 없이 브라우저에서 바로 즐기는 얼굴 인식 AR 이모지 필터 서비스입니다. 카페 등 오프라인 공간의 웹캠 포토존을 혁신적으로 업그레이드합니다.
 
 ## 목차
@@ -24,6 +24,8 @@
 - [기술 스택](#기술-스택)
 - [시스템 아키텍처](#시스템-아키텍처)
 - [설치 및 실행](#설치-및-실행)
+  - [Docker를 사용하여 실행](#docker를-사용하여-실행)
+  - [로컬 환경에서 직접 실행 (Docker 미사용)](#로컬-환경에서-직접-실행-docker-미사용)
 - [API 문서](#api-문서)
 - [팀원 소개](#팀원-소개)
 - [라이선스](#라이선스)
@@ -63,7 +65,8 @@ FilMoji 프로젝트는 다음과 같은 기술 스택으로 구성되어 있습
     *   OpenCV-Python: 이미지 및 비디오 처리 라이브러리
 *   **클라우드 / 스토리지**:
     *   Oracle Cloud Infrastructure (OCI) Object Storage: 이미지 파일 저장 및 관리
-
+*   **컨테이너 / 오케스트레이션**:
+    * Docker: 컨테이너화 플랫폼
 ## 시스템 아키텍처
 
 FilMoji는 크게 두 개의 주요 서비스와 데이터베이스, 클라우드 스토리지를 포함하는 분산 아키텍처로 구성됩니다.
@@ -103,7 +106,9 @@ FilMoji는 크게 두 개의 주요 서비스와 데이터베이스, 클라우�
 
 FilMoji 프로젝트를 로컬 환경에서 Docker 컨테이너를 사용하여 실행하는 방법을 안내합니다.
 
-### 전제 조건
+### Docker를 사용하여 실행
+
+#### 전제 조건
 
 *   Java Development Kit (JDK) 17 이상
 *   Python 3.11 이상
@@ -111,14 +116,14 @@ FilMoji 프로젝트를 로컬 환경에서 Docker 컨테이너를 사용하여 
 *   Git (소스 코드 클론용)
 *   MySQL (로컬 설치 또는 Docker 컨테이너 사용)
 
-### 1. 프로젝트 클론
+#### 1. 프로젝트 클론
 
 ```bash
 git clone [프로젝트_저장소_URL]
 cd deepLearning
 ```
 
-### 2. Spring Boot JAR 파일 빌드
+#### 2. Spring Boot JAR 파일 빌드
 
 `backend` 디렉토리로 이동하여 Spring Boot 애플리케이션을 실행 가능한 JAR 파일로 빌드합니다.
 
@@ -128,9 +133,9 @@ cd backend
 cd .. # deepLearning 루트 디렉토리로 돌아오기
 ```
 
-### 3. Dockerfile 수정 및 이미지 빌드
+#### 3. Dockerfile 수정 및 이미지 빌드
 
-#### 3.1. FastAPI `Dockerfile` 수정
+##### 3.1. FastAPI `Dockerfile` 수정
 
 `landmark_server/Dockerfile` 파일을 열고 `dlib` 및 `OpenCV` 빌드에 필요한 시스템 종속성을 설치하도록 다음 내용을 확인합니다.
 
@@ -163,7 +168,7 @@ EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-#### 3.2. `requirements.txt` 확인
+##### 3.2. `requirements.txt` 확인
 
 `landmark_server/requirements.txt` 파일을 확인합니다.
 
@@ -176,7 +181,7 @@ opencv-python
 numpy
 ```
 
-#### 3.3. Docker 이미지 빌드
+##### 3.3. Docker 이미지 빌드
 
 각 애플리케이션의 루트 디렉토리에서 다음 명령어를 실행하여 Docker 이미지를 빌드합니다.
 
@@ -192,7 +197,7 @@ docker build -t fastapi-landmark-server .
 cd ..
 ```
 
-### 4. Docker 네트워크 생성
+#### 4. Docker 네트워크 생성
 
 두 컨테이너가 서로 통신할 수 있도록 Docker 네트워크를 생성합니다.
 
@@ -200,7 +205,7 @@ cd ..
 docker network create filmoji-network
 ```
 
-### 5. Spring Boot `application.properties` 수정 및 재빌드
+#### 5. Spring Boot `application.properties` 수정 및 재빌드
 
 Spring Boot 애플리케이션이 Docker 네트워크 내의 MySQL 및 FastAPI 컨테이너와 통신할 수 있도록 `backend/src/main/resources/application.properties` 파일을 수정합니다.
 
@@ -213,7 +218,7 @@ Spring Boot 애플리케이션이 Docker 네트워크 내의 MySQL 및 FastAPI �
 spring.datasource.url=jdbc:mysql://${DB_HOST:filmoji-mysql}:3306/${DB_NAME:fil-moji}?serverTimezone=Asia/Seoul&useSSL=false
 
 spring.datasource.username=root
-spring.datasource.password=your_mysql_root_password # 위에서 설정한 MySQL 비밀번호
+spring.datasource.password=${DB_PASSWORD:your_mysql_root_password} # DB_PASSWORD 환경 변수 값 또는 기본값
 
 # FastAPI 서버 URL (Spring Boot에서 FastAPI로 요청을 보낼 경우)
 # 예시: python.server.url=http://filmoji-landmark:8000
@@ -236,7 +241,7 @@ docker build -t spring-boot-backend .
 cd ..
 ```
 
-### 6. MySQL 컨테이너 실행 (선택 사항)
+#### 6. MySQL 컨테이너 실행 (선택 사항)
 
 로컬에 MySQL이 설치되어 있지 않거나 Docker 컨테이너로 MySQL을 사용하려면 다음 명령어를 실행합니다. `your_mysql_root_password`를 원하는 비밀번호로 변경하세요.
 
@@ -246,7 +251,7 @@ docker run -d --name filmoji-mysql --network filmoji-network -p 3306:3306 \
   -e MYSQL_DATABASE=fil-moji mysql:8.0
 ```
 
-### 7. 컨테이너 실행
+#### 7. 컨테이너 실행
 
 이제 모든 준비가 완료되었습니다. 다음 명령어를 사용하여 각 애플리케이션 컨테이너를 실행합니다.
 
@@ -255,13 +260,14 @@ docker run -d --name filmoji-mysql --network filmoji-network -p 3306:3306 \
 docker run -d --name filmoji-backend --network filmoji-network -p 8080:8080 \
   -e DB_HOST=filmoji-mysql \
   -e DB_NAME=fil-moji \
+  -e DB_PASSWORD=your_mysql_root_password \
   spring-boot-backend:latest
 
 # FastAPI 컨테이너 실행
 docker run -d --name filmoji-landmark --network filmoji-network -p 8000:8000 fastapi-landmark-server:latest
 ```
 
-### 8. 실행 확인
+#### 8. 실행 확인
 
 *   실행 중인 컨테이너 확인:
     ```bash
@@ -271,10 +277,76 @@ docker run -d --name filmoji-landmark --network filmoji-network -p 8000:8000 fas
     ```bash
     docker logs filmoji-backend
     docker logs filmoji-landmark
-    ```
-# docker logs filmoji-mysql (MySQL 컨테이너 실행 시)
+## docker logs filmoji-mysql (MySQL 컨테이너 실행 시)
 
     모든 컨테이너가 `Up` 상태이고 로그에 오류가 없다면, 웹 브라우저에서 `http://localhost:8080`으로 접속하여 Spring Boot 애플리케이션에 접근할 수 있습니다.
+
+<br>
+
+### 로컬 환경에서 직접 실행 (Docker 미사용)
+
+Docker를 사용하지 않고 로컬 환경에서 직접 애플리케이션을 실행하는 방법입니다.
+
+#### 전제 조건
+
+*   Java Development Kit (JDK) 17 이상 설치
+*   Python 3.11 이상 설치
+*   MySQL 서버 설치 및 실행
+*   Git (소스 코드 클론용)
+
+#### 1. 프로젝트 클론
+
+```bash
+git clone [프로젝트_저장소_URL]
+cd deepLearning
+```
+
+#### 2. MySQL 데이터베이스 설정
+
+로컬 MySQL 서버에 `fil-moji` 데이터베이스를 생성합니다.
+
+```sql
+CREATE DATABASE `fil-moji` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+#### 3. Spring Boot 백엔드 실행
+
+1.  **`application.properties` 수정**:
+    `backend/src/main/resources/application.properties` 파일을 열고 MySQL 및 FastAPI 연결 정보를 로컬 환경에 맞게 수정합니다.
+
+    ```properties
+    # backend/src/main/resources/application.properties
+
+    # MySQL 연결 정보 (로컬 MySQL 사용 시)
+    spring.datasource.url=jdbc:mysql://localhost:3306/fil-moji?serverTimezone=Asia/Seoul&useSSL=false
+    spring.datasource.username=root
+    spring.datasource.password=your_mysql_root_password # 실제 MySQL 비밀번호로 변경
+
+    # FastAPI 서버 URL (로컬에서 직접 실행 시)
+    python.server.url=http://localhost:8000
+
+    # ... (나머지 설정)
+    ```
+
+2.  **`backend` 디렉토리 실행**:
+    `backend` 디렉토리로 이동하여 실행합니다(인텔리제이 및 이클립스 사용).
+
+
+#### 4. FastAPI 랜드마크 서버 실행
+
+1.  **Python 의존성 설치**:
+    `landmark_server` 디렉토리로 이동하여 필요한 Python 라이브러리를 설치합니다.
+
+    ```bash
+    cd landmark_server
+    pip install -r requirements.txt
+    ```
+
+2.  **FastAPI 서버 실행**:
+    ```bash
+    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    cd ..
+    ```
 
 ## API 문서
 
